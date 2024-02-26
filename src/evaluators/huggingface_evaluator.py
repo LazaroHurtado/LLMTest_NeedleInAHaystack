@@ -3,10 +3,12 @@ import os
 
 from .evaluator import Evaluator
 
+from huggingface_hub import login
 from langchain.evaluation import load_evaluator
-from langchain_community.chat_models import ChatOpenAI
+from langchain_community.chat_models.huggingface import ChatHuggingFace
+from langchain_community.llms import HuggingFaceHub
 
-class OpenAIEvaluator(Evaluator):
+class HuggingFaceEvaluator(Evaluator):
     CRITERIA = {"accuracy": """
                 Score 1: The answer is completely unrelated to the reference.
                 Score 3: The answer has minor relevance but does not align with the reference.
@@ -16,32 +18,37 @@ class OpenAIEvaluator(Evaluator):
                 Only respond with a numberical score"""}
 
     def __init__(self,
-                 model_name: str = "gpt4",
-                 api_key: str = None,
+                 model_name: str = None,
+                 api_token: str = None,
                  true_answer: str = None,
-                 question_asked: str = None):
+                 question_asked: str = None,
+                 model_kwargs: dict = {"temperature": 0.0}):
         """
         :param model_name: The name of the model.
-        :param api_key: The API key for OpenAI. Default is None.
+        :param api_token: The API token for HuggingFace. Default is None.
         :param true_answer: The true answer to the question asked.
         :param question_asked: The question asked to the model.
         """
 
+        if not model_name:
+            raise ValueError("model_name must be supplied with init.")
         if (not true_answer) or (not question_asked):
             raise ValueError("true_answer and question_asked must be supplied with init.")
+        if (not api_token) and (not os.getenv('HUGGINGFACEHUB_API_TOKEN')):
+            raise ValueError("HUGGINGFACEHUB_API_TOKEN must be in env. Used for evaluation model")
 
         self.model_name = model_name
+        self.api_token = api_token or os.getenv('HUGGINGFACEHUB_API_TOKEN')
         self.true_answer = true_answer
         self.question_asked = question_asked
+        self.model_kwargs = model_kwargs
 
-        if (api_key is None) and (not os.getenv('OPENAI_API_KEY')):
-            raise ValueError("Either api_key must be supplied with init, or OPENAI_API_KEY must be in env. Used for evaluation model")
-        
-        self.api_key = api_key or os.getenv('OPENAI_API_KEY')
+        login(token=self.api_token)
 
-        self.evaluator = ChatOpenAI(model=self.model_name,
-                                    temperature=0,
-                                    openai_api_key=self.api_key)
+        self.model = HuggingFaceHub(repo_id=self.model_name,
+                                    task="text-generation",
+                                    model_kwargs=self.model_kwargs)
+        self.evaluator = ChatHuggingFace(llm=self.model)
 
     def evaluate_response(self, response: str) -> int:
         evaluator = load_evaluator(

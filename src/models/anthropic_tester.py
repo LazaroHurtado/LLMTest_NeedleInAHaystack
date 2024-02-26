@@ -1,7 +1,9 @@
 import os
 
 from .model_tester import ModelTester
+
 from anthropic import AsyncAnthropic, Anthropic
+from typing import Optional
 
 class AnthropicTester(ModelTester):
     def __init__(self, model_name: str = "claude", api_key: str = None):
@@ -24,7 +26,7 @@ class AnthropicTester(ModelTester):
 
         # Generate the prompt structure for the Anthropic model
         # Replace the following file with the appropriate prompt structure
-        with open('Anthropic_prompt.txt', 'r') as file:
+        with open('./Anthropic_prompt.txt', 'r') as file:
             self.prompt_structure = file.read()
 
     async def evaluate_model(self, prompt: str) -> str:
@@ -43,6 +45,6 @@ class AnthropicTester(ModelTester):
     def encode_text_to_tokens(self, text: str) -> list[int]:
         return self.enc.encode(text).ids
     
-    def decode_tokens(self, tokens: list[int], context_length: int | None = None) -> str:
+    def decode_tokens(self, tokens: list[int], context_length: Optional[int] = None) -> str:
         # Assuming you have a different decoder for Anthropic
         return self.enc.decode(tokens[:context_length])

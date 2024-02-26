@@ -6,7 +6,6 @@ setup: create_venv
 create_venv:
 	python3 -m venv ./$(VENV_NAME) ;\
 	source ./$(VENV_NAME)/bin/activate ;\
-	pip3 install -q -r requirements.txt
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +

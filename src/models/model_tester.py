@@ -1,5 +1,6 @@
 
 from abc import ABC, abstractmethod
+from typing import Optional
 
 class ModelTester(ABC):
     @abstractmethod
@@ -12,4 +13,4 @@ class ModelTester(ABC):
     def encode_text_to_tokens(self, text: str) -> list[int]: ...
 
     @abstractmethod
-    def decode_tokens(self, tokens: list[int], context_length: int = None) -> str: ...
+    def decode_tokens(self, tokens: list[int], context_length: Optional[int] = None) -> str: ...

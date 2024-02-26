@@ -2,7 +2,9 @@ import os
 import tiktoken
 
 from .model_tester import ModelTester
+
 from openai import AsyncOpenAI
+from typing import Optional
 
 class OpenAITester(ModelTester):
     def __init__(self, model_name: str = "gpt-4-1106-preview", api_key: str = None):
@@ -46,5 +48,5 @@ class OpenAITester(ModelTester):
     def encode_text_to_tokens(self, text: str) -> list[int]:
         return self.enc.encode(text)
     
-    def decode_tokens(self, tokens: list[int], context_length: int | None = None) -> str:
+    def decode_tokens(self, tokens: list[int], context_length: Optional[int] = None) -> str:
         return self.enc.decode(tokens[:context_length])

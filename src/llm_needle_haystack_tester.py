@@ -10,9 +10,6 @@ from .models import ModelTester
 
 from asyncio import Semaphore
 from datetime import datetime, timezone
-from dotenv import load_dotenv
-
-load_dotenv()
 
 class LLMNeedleHaystackTester:
     """
@@ -301,7 +298,7 @@ class LLMNeedleHaystackTester:
     def print_start_test_summary(self):
         print ("\n")
         print ("Starting Needle In A Haystack Testing...")
-        print (f"- Model: {self.model_name}")
+        print (f"- Model: {self.model_to_test.model_name}")
         print (f"- Context Lengths: {len(self.context_lengths)}, Min: {min(self.context_lengths)}, Max: {max(self.context_lengths)}")
         print (f"- Document Depths: {len(self.document_depth_percents)}, Min: {min(self.document_depth_percents)}%, Max: {max(self.document_depth_percents)}%")
         print (f"- Needle: {self.needle.strip()}")
