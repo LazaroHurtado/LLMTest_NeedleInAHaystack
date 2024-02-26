@@ -21,9 +21,9 @@ class CommandArgs():
 def get_model_to_test(args) -> ModelTester:
     match args.provider.lower():
         case "openai":
-            return OpenAITester(model_name=args.model_name, api_key=args.api_key)
+            return OpenAITester(api_key=args.api_key)
         case "anthropic":
-            return AnthropicTester(model_name=args.model_name, api_key=args.api_key)
+            return AnthropicTester(api_key=args.api_key)
         case "huggingface" | "hf":
             return HuggingFaceTester(model_name=args.model_name)
         case _:
