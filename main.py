@@ -6,6 +6,7 @@ from src import Evaluator, HuggingFaceEvaluator, OpenAIEvaluator
 from dataclasses import dataclass
 from dotenv import load_dotenv
 from jsonargparse import CLI
+from typing import Optional
 
 load_dotenv()
 
@@ -13,9 +14,9 @@ load_dotenv()
 class CommandArgs():
     provider: str = "openai"
     evaluator: str = "openai"
-    api_key: str = None
-    evaluator_api_key: str = None
-    model_name: str = None
+    api_key: Optional[str] = None
+    evaluator_api_key: Optional[str] = None
+    model_name: Optional[str] = None
 
 def get_model_to_test(args) -> ModelTester:
     match args.provider.lower():

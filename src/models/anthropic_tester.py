@@ -26,7 +26,7 @@ class AnthropicTester(ModelTester):
 
         # Generate the prompt structure for the Anthropic model
         # Replace the following file with the appropriate prompt structure
-        with open('./Anthropic_prompt.txt', 'r') as file:
+        with open('Anthropic_prompt.txt', 'r') as file:
             self.prompt_structure = file.read()
 
     async def evaluate_model(self, prompt: str) -> str:

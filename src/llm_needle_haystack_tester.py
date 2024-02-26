@@ -102,6 +102,8 @@ class LLMNeedleHaystackTester:
             self.document_depth_percents = document_depth_percents
         
         self.model_to_test = model_to_test
+        self.model_name = self.model_to_test.model_name
+        
         self.evaluation_model = evaluator
 
     def logistic(self, x, L=100, x0=50, k=.1):
