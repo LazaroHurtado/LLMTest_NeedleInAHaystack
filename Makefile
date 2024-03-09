@@ -6,10 +6,13 @@ setup: create_venv
 
 create_venv:
 	python3 -m venv ./$(VENV_NAME) ;\
-	
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
+
+reset_run:
+	find . -type d -name "contexts" -exec rm -rf {} +
+	find . -type d -name "results" -exec rm -rf {} +
 
 destroy: clean
 	rm -rf ./$(VENV_NAME)

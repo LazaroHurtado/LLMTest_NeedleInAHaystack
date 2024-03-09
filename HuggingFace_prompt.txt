@@ -1,6 +1,2 @@
-<|im_start|>system
-You are a helpful AI bot that answers questions for a user. Keep your response short and direct<|im_end|>
-<|im_start|>user
-{context}
-{retrieval_question} Don't give information outside the document or repeat your findings<|im_end|>
-<|im_start|>assistant
+Instruct: {context} Only answer the following question and nothing else. Keep your response as concise as possible. {retrieval_question}
+Output:

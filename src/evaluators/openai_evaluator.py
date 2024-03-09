@@ -50,15 +50,22 @@ class OpenAIEvaluator(Evaluator):
             llm=self.evaluator,
         )
 
-        eval_result = evaluator.evaluate_strings(
-            # The models response
-            prediction=response,
+        for r in range(3):
+            try:
+                eval_result = evaluator.evaluate_strings(
+                    # The models response
+                    prediction=response,
 
-            # The actual answer
-            reference=self.true_answer,
+                    # The actual answer
+                    reference=self.true_answer,
 
-            # The question asked
-            input=self.question_asked,
-        )
+                    # The question asked
+                    input=self.question_asked,
+                )
 
-        return int(eval_result['score'])
+                return int(eval_result['score'])
+            except Exception as e:
+                print(e)
+                print(f"Error evaluating response. Retrying {r+1}/3")
+        
+        return 1
