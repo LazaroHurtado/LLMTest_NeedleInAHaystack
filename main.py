@@ -26,7 +26,7 @@ def get_model_to_test(args) -> ModelTester:
         case "anthropic":
             return AnthropicTester(model_name=args.model_name, api_key=args.api_key)
         case "huggingface" | "hf":
-            return HuggingFaceTester(model_name=args.model_name, device="cpu")
+            return HuggingFaceTester(model_name=args.model_name, device="cuda")
         case _:
             raise ValueError(f"Invalid provider: {args.provider}")
         

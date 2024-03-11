@@ -26,7 +26,7 @@ class HuggingFaceTester(ModelTester):
         try:
             self.tokenizer = AutoTokenizer.from_pretrained(model_name)
             self.model = AutoModelForCausalLM.from_pretrained(model_name,
-                                                              device_map=self.device,
+                                                              device_map="auto",
                                                               trust_remote_code=True,
                                                               pad_token_id=self.tokenizer.pad_token_id,
                                                               eos_token_id=self.tokenizer.eos_token_id)

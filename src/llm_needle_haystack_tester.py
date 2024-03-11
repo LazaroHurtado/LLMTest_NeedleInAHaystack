@@ -284,8 +284,13 @@ class LLMNeedleHaystackTester:
 
         while self.get_context_length_in_tokens(context) < max_context_length:
             for file in glob.glob(f"{self.haystack_dir}/*.txt"):
-                with open(file, 'r') as f:
-                    context += f.read()
+                try:
+                    with open(file, 'r') as f:
+                        context += f.read()
+                except Exception as e:
+                    with open("error_log.txt", "a") as f:
+                        f.write(f"Error reading file {file}: {e}\n")
+                    continue
         return context
 
     def encode_and_trim(self, context, context_length):
