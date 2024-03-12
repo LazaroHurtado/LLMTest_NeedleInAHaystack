@@ -34,7 +34,7 @@ class HuggingFaceTester(ModelTester):
             raise ValueError(f"Error loading model {model_name}: {e}")
         
 
-        with open('HuggingFace_prompt.txt', 'r') as file:
+        with open('HuggingFace_finetuned_prompt.txt', 'r') as file:
             self.prompt_structure = file.read()
 
     async def evaluate_model(self, prompt: str) -> str:
