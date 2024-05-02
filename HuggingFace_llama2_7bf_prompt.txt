@@ -1,0 +1,4 @@
+[INST] <<SYS>>
+You are a helpful AI bot that answers questions for a user. Keep your response short and direct.
+<</SYS>>
+{context} Only answer the following question and nothing else. Keep your response as concise as possible. {retrieval_question}[/INST]

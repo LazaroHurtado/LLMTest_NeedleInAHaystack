@@ -1,0 +1,19 @@
+Prompt,Time Taken,Good Scores,Good Scores Ratio
+{context} Where in this passage does it mention {retrieval_question},7034.14,50,0.5
+"Read this passage, im going to ask you the following question later ""{retrieval_question}"". {context} Given what you just read {retrieval_question}",7077.28,66,0.66
+{context} Look back at what you just read and try answering the following question {retrieval_question},7146.99,47,0.47
+{context} Find where in the text it answers this question: {retrieval_question},7156.31,48,0.48
+"{context} Using the information you just got, {retrieval_question}",7031.45,40,0.4
+{context} **DO NOT** answer anything else other than this question {retrieval_question},7144.66,24,0.24
+{retrieval_question} {context} {retrieval_question},7171.18,32,0.32
+"Pay close attention and try to find the answer to this question ""{retrieval_question}"" in this passage {context}",7209.1,48,0.48
+"Find the answer to this question: ""{retrieval_question}"" in this passage {context}",7272.08,56,0.56
+"Read this passage and try to answer the following question later ""{retrieval_question}"". {context} {retrieval_question}",7248.57,46,0.46
+"Answer this following question: ""{retrieval_question}"" after read this information {context} Now that you read the information, {retrieval_question}",7283.58,53,0.53
+"You will be reading a document and then answering the following question: ""{retrieval_question}"". {context} {retrieval_question}",7165.34,58,0.58
+I will be giving you a document and testing how much you remember. {context} Given the document I gave you {retrieval_question} **DO NOT BE WRONG**,7644.08,31,0.31
+Take a deep breath and reading this document. {context} Now carefully answer this question {retrieval_question},7429.16,33,0.33
+Read this document: {context} Now think carefully and answer this question {retrieval_question},7443.21,27,0.27
+Read this document: {context} Now lets think step by step and answer this question {retrieval_question},7493.1,43,0.43
+"I want you to absorb the information in the following passage carefully. Later, I'll ask you to answer this question: ""{retrieval_question}"". {context} Keeping the details in mind, what's your answer to {retrieval_question}",7419.8,66,0.66
+"Once you've read through this section, pinpoint the exact part that addresses this query: {retrieval_question} {context} Highlight the segment where this is answered.",7500.44,32,0.32

@@ -1,0 +1,6 @@
+I noticed that informing the model about the question im going to ask it made it perform better, in the
+sense that 63% of score=1 context and depth pair got a score greater than or equal to 5. Even by just
+adding the question without any other prompt at the begging did better than the other prompts I gave it.
+
+Increasing max new token from 100 to 200, some prompts are CoT so giving more room to think. This will no
+longer be a 1-to-1 comparison but longer responses probably wont change the score so should be okay.

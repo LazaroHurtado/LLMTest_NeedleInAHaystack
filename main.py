@@ -1,7 +1,7 @@
 
 from src import LLMNeedleHaystackTester, OpenAIEvaluator
 from src import ModelTester, AnthropicTester, HuggingFaceTester, OpenAITester
-from src import Evaluator, HuggingFaceEvaluator, OpenAIEvaluator
+from src import Evaluator, HuggingFaceEvaluator, OpenAIEvaluator, AzureOpenAIEvaluator
 
 from dataclasses import dataclass
 from dotenv import load_dotenv
@@ -26,7 +26,7 @@ def get_model_to_test(args) -> ModelTester:
         case "anthropic":
             return AnthropicTester(model_name=args.model_name, api_key=args.api_key)
         case "huggingface" | "hf":
-            return HuggingFaceTester(model_name=args.model_name, device="cuda")
+            return HuggingFaceTester(model_name=args.model_name, device="cpu")
         case _:
             raise ValueError(f"Invalid provider: {args.provider}")
         
@@ -40,6 +40,10 @@ def get_evaluator(args, question: str, answer: str) -> Evaluator:
         case "huggingface" | "hf":
             return HuggingFaceEvaluator(model_name=args.evaluator_name,
                                         api_token=args.evaluator_api_key,
+                                        question_asked=question,
+                                        true_answer=answer)
+        case "azure" | "aoai":
+            return AzureOpenAIEvaluator(model_name=args.evaluator_name,
                                         question_asked=question,
                                         true_answer=answer)
         case _:

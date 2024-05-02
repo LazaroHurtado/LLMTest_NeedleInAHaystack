@@ -1,12 +1,11 @@
-
-import os
-
 from .evaluator import Evaluator
+from ..utils import get_from_env_or_error
 
 from langchain.evaluation import load_evaluator
 from langchain_community.chat_models import ChatOpenAI
 
 class OpenAIEvaluator(Evaluator):
+    DEFAULT_MODEL_KWARGS: dict = dict(temperature=0)
     CRITERIA = {"accuracy": """
                 Score 1: The answer is completely unrelated to the reference.
                 Score 3: The answer has minor relevance but does not align with the reference.
@@ -16,13 +15,14 @@ class OpenAIEvaluator(Evaluator):
                 Only respond with a numberical score"""}
 
     def __init__(self,
-                 model_name: str = "gpt4",
-                 api_key: str = None,
+                 model_name: str = "gpt-3.5-turbo-0125",
+                 model_kwargs: dict = DEFAULT_MODEL_KWARGS,
                  true_answer: str = None,
+                 api_key: str = None,
                  question_asked: str = None):
         """
         :param model_name: The name of the model.
-        :param api_key: The API key for OpenAI. Default is None.
+        :param model_kwargs: Model configuration. Default is {temperature: 0}
         :param true_answer: The true answer to the question asked.
         :param question_asked: The question asked to the model.
         """
@@ -31,17 +31,18 @@ class OpenAIEvaluator(Evaluator):
             raise ValueError("true_answer and question_asked must be supplied with init.")
 
         self.model_name = model_name
+        self.model_kwargs = model_kwargs
         self.true_answer = true_answer
         self.question_asked = question_asked
 
-        if (api_key is None) and (not os.getenv('OPENAI_API_KEY')):
-            raise ValueError("Either api_key must be supplied with init, or OPENAI_API_KEY must be in env. Used for evaluation model")
+        self.api_key = get_from_env_or_error(
+            env_key="NIAH_EVALUATOR_API_KEY",
+            error_message="{env_key} must be in env for using openai evaluator."
+        )
         
-        self.api_key = api_key or os.getenv('OPENAI_API_KEY')
-
         self.evaluator = ChatOpenAI(model=self.model_name,
-                                    temperature=0,
-                                    openai_api_key=self.api_key)
+                                    openai_api_key=self.api_key,
+                                    **self.model_kwargs)
 
     def evaluate_response(self, response: str) -> int:
         evaluator = load_evaluator(
@@ -50,22 +51,19 @@ class OpenAIEvaluator(Evaluator):
             llm=self.evaluator,
         )
 
-        for r in range(3):
-            try:
-                eval_result = evaluator.evaluate_strings(
-                    # The models response
-                    prediction=response,
+        try:
+            eval_result = evaluator.evaluate_strings(
+                # The models response
+                prediction=response,
 
-                    # The actual answer
-                    reference=self.true_answer,
+                # The actual answer
+                reference=self.true_answer,
 
-                    # The question asked
-                    input=self.question_asked,
-                )
+                # The question asked
+                input=self.question_asked,
+            )
+        except Exception as e:
+            print(f"Error evaluating: {e}")
+            exit(1)
 
-                return int(eval_result['score'])
-            except Exception as e:
-                print(e)
-                print(f"Error evaluating response. Retrying {r+1}/3")
-        
-        return 1
+        return int(eval_result['score'])

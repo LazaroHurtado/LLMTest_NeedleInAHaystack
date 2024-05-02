@@ -1,3 +1,4 @@
+import os
 import torch
 
 from .model_tester import ModelTester
@@ -16,34 +17,38 @@ class HuggingFaceTester(ModelTester):
     def __init__(self,
                  model_name: str,
                  model_kwargs: dict = DEFAULT_MODEL_KWARGS,
-                 device: str = None):
+                 device: str = "cpu",
+                 prompt_structure: str = None):
         self.model_name = model_name
-        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.model_kwargs = model_kwargs
-
-        torch.set_default_device(device)
+        self.api_key = os.getenv('HUGGINGFACEHUB_API_TOKEN')
+        self.device = device
 
         try:
-            self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+            self.tokenizer = AutoTokenizer.from_pretrained(model_name,
+                                                           trust_remote_code=True)
             self.model = AutoModelForCausalLM.from_pretrained(model_name,
-                                                              device_map="auto",
+                                                              device_map=self.device,
                                                               trust_remote_code=True,
                                                               pad_token_id=self.tokenizer.pad_token_id,
-                                                              eos_token_id=self.tokenizer.eos_token_id)
+                                                              eos_token_id=self.tokenizer.eos_token_id,
+                                                              torch_dtype="auto",
+                                                              token=self.api_key)
         except Exception as e:
             raise ValueError(f"Error loading model {model_name}: {e}")
         
-
-        with open('HuggingFace_finetuned_prompt.txt', 'r') as file:
-            self.prompt_structure = file.read()
+        if not prompt_structure:
+            with open('HuggingFace_phi3_prompt.txt', 'r') as file:
+                self.prompt_structure = file.read()
+        else:
+            self.prompt_structure = prompt_structure
 
     async def evaluate_model(self, prompt: str) -> str:
         prompt = prompt.replace("\n", " ").replace("Output:", "\nOutput:")
         tokens = self.tokenizer(prompt,
-                                return_tensors="pt",
-                                return_attention_mask=False)["input_ids"]
+                                return_tensors="pt").to("cpu")
         
-        response = self.model.generate(tokens,
+        response = self.model.generate(**tokens,
                                        pad_token_id=self.tokenizer.eos_token_id,
                                        **self.model_kwargs)
         encoded_response = response.data.tolist()[0][len(tokens[0]):]

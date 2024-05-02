@@ -137,6 +137,7 @@ class LLMNeedleHaystackTester:
         # This helps if the program stop running and you want to restart later
         if self.save_results:
             if self.result_exists(context_length, depth_percent):
+                print(f"Skipping test for context length {context_length} and depth percent {depth_percent} as it already exists.")
                 return
 
         # Go generate the required length context and place your needle statement in
@@ -155,7 +156,6 @@ class LLMNeedleHaystackTester:
 
         # Compare the reponse to the actual needle you placed
         score = self.evaluation_model.evaluate_response(response)
-
         results = {
             # 'context' : context, # Uncomment this line if you'd like to save the context the model was asked to retrieve from. Warning: This will become very large.
             'model' : self.model_name,
@@ -192,6 +192,7 @@ class LLMNeedleHaystackTester:
                 f.write(context)
             
         if self.save_results:
+            print("saving results")
             # Save the context to file for retesting
             if not os.path.exists('results'):
                 os.makedirs('results')

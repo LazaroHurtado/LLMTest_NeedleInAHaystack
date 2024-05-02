@@ -26,7 +26,7 @@ class OpenAITester(ModelTester):
         response = await self.model.chat.completions.create(
                 model=self.model_name,
                 messages=prompt,
-                max_tokens=300,
+                max_tokens=200,
                 temperature=0
             )
         return response.choices[0].message.content
