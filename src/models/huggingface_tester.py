@@ -18,10 +18,15 @@ class HuggingFaceTester(ModelTester):
                  model_name: str,
                  model_kwargs: dict = DEFAULT_MODEL_KWARGS,
                  device: str = "cpu",
+                 api_key: str = None,
                  prompt_structure: str = None):
         self.model_name = model_name
         self.model_kwargs = model_kwargs
-        self.api_key = os.getenv('HUGGINGFACEHUB_API_TOKEN')
+
+        if api_key:
+            self.api_key = api_key
+        else:
+            self.api_key = os.getenv('HUGGINGFACEHUB_API_TOKEN')
         self.device = device
 
         try:
