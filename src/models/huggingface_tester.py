@@ -43,10 +43,11 @@ class HuggingFaceTester(ModelTester):
             raise ValueError(f"Error loading model {model_name}: {e}")
         
         if not prompt_structure:
-            with open('HuggingFace_phi3_prompt.txt', 'r') as file:
+            with open('HuggingFace_prompt.txt', 'r') as file:
                 self.prompt_structure = file.read()
         else:
-            self.prompt_structure = prompt_structure
+            with open(prompt_structure, 'r') as file:
+                self.prompt_structure = file.read()
 
     async def evaluate_model(self, prompt: str) -> str:
         prompt = prompt.replace("\n", " ").replace("Output:", "\nOutput:")
