@@ -18,6 +18,7 @@ class CommandArgs():
     evaluator_name: str = "gpt-4"
     device: str = "cpu"
     prompt_structure: Optional[str] = None
+    tokenizer_name: Optional[str] = None
     api_key: Optional[str] = None
     evaluator_api_key: Optional[str] = None
 
@@ -31,7 +32,8 @@ def get_model_to_test(args) -> ModelTester:
             return HuggingFaceTester(model_name=args.model_name,
                                      device=args.device,
                                      api_key=args.api_key,
-                                     prompt_structure=args.prompt_structure)
+                                     prompt_structure=args.prompt_structure,
+                                     tokenizer_name=args.tokenizer_name)
         case _:
             raise ValueError(f"Invalid provider: {args.provider}")
         
