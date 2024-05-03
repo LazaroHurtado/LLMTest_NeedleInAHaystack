@@ -35,10 +35,13 @@ class OpenAIEvaluator(Evaluator):
         self.true_answer = true_answer
         self.question_asked = question_asked
 
-        self.api_key = get_from_env_or_error(
-            env_key="NIAH_EVALUATOR_API_KEY",
-            error_message="{env_key} must be in env for using openai evaluator."
-        )
+        if api_key:
+            self.api_key = api_key
+        else:
+            self.api_key = get_from_env_or_error(
+                env_key="NIAH_EVALUATOR_API_KEY",
+                error_message="{env_key} must be in env for using openai evaluator."
+            )
         
         self.evaluator = ChatOpenAI(model=self.model_name,
                                     openai_api_key=self.api_key,

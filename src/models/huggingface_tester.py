@@ -34,7 +34,8 @@ class HuggingFaceTester(ModelTester):
             if not tokenizer_name:
                 tokenizer_name = model_name
             self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name,
-                                                           trust_remote_code=True)
+                                                           trust_remote_code=True,
+                                                           )
             self.model = AutoModelForCausalLM.from_pretrained(model_name,
                                                               device_map=self.device,
                                                               trust_remote_code=True,
