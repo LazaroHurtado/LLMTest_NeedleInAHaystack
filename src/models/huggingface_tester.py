@@ -18,7 +18,7 @@ class HuggingFaceTester(ModelTester):
                  model_name: str,
                  model_kwargs: dict = DEFAULT_MODEL_KWARGS,
                  tokenizer_name: str = None,
-                 device: str = "cpu",
+                 device: str = "cuda",
                  api_key: str = None,
                  prompt_structure: str = None):
         self.model_name = model_name
@@ -56,7 +56,7 @@ class HuggingFaceTester(ModelTester):
     async def evaluate_model(self, prompt: str) -> str:
         prompt = prompt.replace("\n", " ").replace("Output:", "\nOutput:")
         tokens = self.tokenizer(prompt,
-                                return_tensors="pt").to("cpu")
+                                return_tensors="pt").to("cuda")
         
         response = self.model.generate(**tokens,
                                        pad_token_id=self.tokenizer.eos_token_id,

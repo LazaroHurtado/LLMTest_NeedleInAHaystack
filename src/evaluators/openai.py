@@ -54,19 +54,21 @@ class OpenAIEvaluator(Evaluator):
             llm=self.evaluator,
         )
 
-        try:
-            eval_result = evaluator.evaluate_strings(
-                # The models response
-                prediction=response,
+        for _ in range(3):
+            try:
+                eval_result = evaluator.evaluate_strings(
+                    # The models response
+                    prediction=response,
+    
+                    # The actual answer
+                    reference=self.true_answer,
+    
+                    # The question asked
+                    input=self.question_asked,
+                )
 
-                # The actual answer
-                reference=self.true_answer,
+                return int(eval_result['score'])
+            except Exception as e:
+                continue
 
-                # The question asked
-                input=self.question_asked,
-            )
-        except Exception as e:
-            print(f"Error evaluating: {e}")
-            exit(1)
-
-        return int(eval_result['score'])
+        return 1

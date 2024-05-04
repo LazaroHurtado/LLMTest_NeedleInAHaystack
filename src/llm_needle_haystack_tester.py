@@ -19,7 +19,7 @@ class LLMNeedleHaystackTester:
                  model_to_test: ModelTester = None,
                  evaluator: Evaluator = None,
                  needle = None,
-                 haystack_dir = "PaulGrahamEssays",
+                 haystack_dir = "./LLMTest_NeedleInAHaystack/PaulGrahamEssays",
                  retrieval_question = None,
                  results_version = 1,
                  context_lengths_min = 1000,

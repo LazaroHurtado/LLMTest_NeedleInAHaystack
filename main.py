@@ -16,7 +16,7 @@ class CommandArgs():
     evaluator: str = "openai"
     model_name: str = "gpt-4-1106-preview"
     evaluator_name: str = "gpt-4"
-    device: str = "cpu"
+    device: str = "cuda"
     prompt_structure: Optional[str] = None
     tokenizer_name: Optional[str] = None
     api_key: Optional[str] = None
